@@ -1,7 +1,6 @@
 import { Button, DottedLine, ThemedView as View } from "@/components";
-import { TaskCategories } from "@/components/task-category-list";
 import { Colors, Font, Spacing } from "@/constants/theme";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 
@@ -155,12 +154,7 @@ const tasks = [
   },
 ];
 
-export default function TasksPage() {
-  const { type } = useLocalSearchParams();
-  const title = TaskCategories.find(
-    (category) => category.slug === type
-  )!.title;
-
+export default function CompletedTasksPage() {
   return (
     <View style={StyleSheet.absoluteFill}>
       <ScrollView
@@ -176,9 +170,9 @@ export default function TasksPage() {
           color="tertiary"
           icon={require("@/assets/icons/chevron-right-black.png")}
         />
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>Completed Tasks</Text>
         <Text style={styles.subtitle}>
-          All currently available {title.toLowerCase()}.
+          All your completed task from drone network.
         </Text>
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
@@ -197,10 +191,7 @@ export default function TasksPage() {
           <Button icon={require("@/assets/icons/filter.png")} />
         </View>
         <DottedLine />
-        <Text style={styles.taskCount}>
-          Total of <Text style={{ fontWeight: "bold" }}>{tasks.length}</Text>{" "}
-          Tasks
-        </Text>
+        <Text style={styles.taskCount}>Today</Text>
         <View style={styles.tasksContainer}>
           {tasks.map((task) => (
             <TouchableOpacity
@@ -208,8 +199,8 @@ export default function TasksPage() {
               style={styles.taskCard}
               onPress={() =>
                 router.push({
-                  pathname: "/tasks/[type]/[id]",
-                  params: { type: type as string, id: task.id },
+                  pathname: "/completed/[id]",
+                  params: { id: task.id },
                 })
               }
             >
@@ -233,7 +224,6 @@ export default function TasksPage() {
                   </Text>
                 </View>
               </View>
-              <Image source={task.icon} />
               <Image
                 source={require("@/assets/icons/chevron-right-black.png")}
               />

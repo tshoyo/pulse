@@ -1,7 +1,10 @@
 module.exports = function (api) {
   api.cache(true);
   return {
-    plugins: [["react-native-worklets-core/plugin"]],
+    plugins: [
+      ["@babel/plugin-transform-export-namespace-from"],
+      ["react-native-worklets-core/plugin"],
+    ],
     presets: ["babel-preset-expo"],
   };
 };

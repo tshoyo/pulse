@@ -1,9 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, processLock } from "@supabase/supabase-js";
 import * as aesjs from "aes-js";
 import * as SecureStore from "expo-secure-store";
+import { AppState, Platform } from "react-native";
 import "react-native-get-random-values";
 import "react-native-url-polyfill/auto";
+
 // As Expo's SecureStore does not support values larger than 2048
 // bytes, an AES-256 key is generated and stored in SecureStore, while
 // it is used to encrypt/decrypt values stored in AsyncStorage.
@@ -49,15 +51,38 @@ class LargeSecureStore {
     await AsyncStorage.setItem(key, encrypted);
   }
 }
+
 export const supabase = createClient(
-  process.env.EXPO_PUBLIC_API_URL || "",
-  process.env.EXPO_PUBLIC_API_URL || "",
+  process.env.EXPO_PUBLIC_SUPABASE_URL || "",
+  process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "",
   {
     auth: {
-      storage: new LargeSecureStore(),
+      ...(Platform.OS !== "web"
+        ? { storage: AsyncStorage }
+        : {
+            storage: new LargeSecureStore(),
+            autoRefreshToken: true,
+            persistSession: true,
+            detectSessionInUrl: false,
+          }),
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: false,
+      lock: processLock,
     },
   }
 );
+// Tells Supabase Auth to continuously refresh the session automatically
+// if the app is in the foreground. When this is added, you will continue
+// to receive `onAuthStateChange` events with the `TOKEN_REFRESHED` or
+// `SIGNED_OUT` event if the user's session is terminated. This should
+// only be registered once.
+if (Platform.OS !== "web") {
+  AppState.addEventListener("change", (state) => {
+    if (state === "active") {
+      supabase.auth.startAutoRefresh();
+    } else {
+      supabase.auth.stopAutoRefresh();
+    }
+  });
+}

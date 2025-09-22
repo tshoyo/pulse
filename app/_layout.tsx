@@ -1,6 +1,4 @@
 import { SplashScreenController } from "@/components/splash-screen-controller";
-import { useAuthContext } from "@/hooks/use-auth-context";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 import AuthProvider from "@/providers/auth-provider";
 import {
   DarkTheme,
@@ -10,26 +8,29 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
+
 // Separate RootNavigator so we can access the AuthContext
 function RootNavigator() {
-  const { isLoggedIn } = useAuthContext();
+  // const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn } = { isLoggedIn: true };
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={isLoggedIn}>
-        <Stack.Screen name="(main)" options={{ headerShown: false }} />
+        <Stack.Screen name="(main)" />
       </Stack.Protected>
       <Stack.Protected guard={!isLoggedIn}>
-        <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="login" />
       </Stack.Protected>
       <Stack.Screen name="+not-found" />
     </Stack>
   );
 }
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = "light" as "light" | "dark"; //useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    //SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
   if (!loaded) {
     // Async font loading only occurs in development.
@@ -38,9 +39,11 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <AuthProvider>
-        <SplashScreenController />
-        <RootNavigator />
-        <StatusBar style="auto" />
+        <GestureHandlerRootView>
+          <SplashScreenController />
+          <RootNavigator />
+          <StatusBar style="auto" />
+        </GestureHandlerRootView>
       </AuthProvider>
     </ThemeProvider>
   );

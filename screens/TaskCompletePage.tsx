@@ -49,7 +49,7 @@ const steps = [
   },
 ];
 
-export default function TaskPage() {
+export default function TaskCompletePage() {
   const { type, id } = useLocalSearchParams();
   const title = TaskCategories.find(
     (category) => category.slug === type
@@ -70,6 +70,18 @@ export default function TaskPage() {
           color="tertiary"
           icon={require("@/assets/icons/chevron-right-black.png")}
         />
+        <View
+          style={{
+            alignItems: "center",
+            alignSelf: "stretch",
+            paddingBottom: Spacing.block.medium,
+          }}
+        >
+          <Image source={require("@/assets/images/complete.png")} />
+          <Text style={{ fontSize: Font.size.xlarge, fontWeight: "500" }}>
+            Task Complete!
+          </Text>
+        </View>
         <Text style={styles.title}>{"Traffic Stop - Speeding"}</Text>
         <View
           style={{
@@ -119,21 +131,6 @@ export default function TaskPage() {
             </Text>
           </View>
         </View>
-        <View style={styles.stepsContainer}>
-          {steps.map((step) => (
-            <View key={step.title} style={styles.stepCard}>
-              <Image
-                style={{ marginTop: Spacing.block.xsmall }}
-                source={step.icon}
-              />
-              <View style={styles.stepContent}>
-                <Text style={styles.stepSubtitle}>{step.subtitle}</Text>
-                <Text style={styles.stepTitle}>{step.title}</Text>
-                <Text style={styles.stepDescription}>{step.description}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
         <View
           style={{
             width: "100%",
@@ -154,10 +151,8 @@ export default function TaskPage() {
               flexGrow: 0,
               flexBasis: "auto",
             }}
-            text="Deploy Task"
-            onPress={() => {
-              router.push("/drone");
-            }}
+            text="Return Home"
+            onPress={() => router.replace("/(main)")}
           />
         </View>
       </ScrollView>

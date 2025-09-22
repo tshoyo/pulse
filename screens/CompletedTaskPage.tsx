@@ -1,5 +1,4 @@
 import { Button, DottedLine, ThemedView as View } from "@/components";
-import { TaskCategories } from "@/components/task-category-list";
 import { Colors, Font, Spacing } from "@/constants/theme";
 import { router, useLocalSearchParams } from "expo-router";
 import { Image, StyleSheet, Text } from "react-native";
@@ -49,11 +48,8 @@ const steps = [
   },
 ];
 
-export default function TaskPage() {
-  const { type, id } = useLocalSearchParams();
-  const title = TaskCategories.find(
-    (category) => category.slug === type
-  )!.title;
+export default function CompletedTaskPage() {
+  const { id } = useLocalSearchParams();
 
   return (
     <View style={StyleSheet.absoluteFill}>
@@ -87,79 +83,6 @@ export default function TaskPage() {
           </Text>
         </View>
         <DottedLine />
-        <View style={styles.taskMetadata}>
-          <Text style={{ fontSize: Font.size.small }}>ID: #1234</Text>
-          <View
-            style={{
-              flexDirection: "row",
-              gap: Spacing.text.xsmall,
-              alignItems: "center",
-              backgroundColor: "transparent",
-            }}
-          >
-            <Image
-              source={require("@/assets/icons/check-circle-green.png")}
-              style={{ width: 16, height: 16 }}
-            />
-            <Text style={{ fontSize: Font.size.medium, fontWeight: "600" }}>
-              Compatible with current drone.
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              gap: Spacing.text.xsmall,
-              alignItems: "center",
-              backgroundColor: "transparent",
-            }}
-          >
-            <Image source={require("@/assets/icons/clock.png")} />
-            <Text style={{ fontSize: Font.size.small }}>
-              08:00 min - {steps.length} steps
-            </Text>
-          </View>
-        </View>
-        <View style={styles.stepsContainer}>
-          {steps.map((step) => (
-            <View key={step.title} style={styles.stepCard}>
-              <Image
-                style={{ marginTop: Spacing.block.xsmall }}
-                source={step.icon}
-              />
-              <View style={styles.stepContent}>
-                <Text style={styles.stepSubtitle}>{step.subtitle}</Text>
-                <Text style={styles.stepTitle}>{step.title}</Text>
-                <Text style={styles.stepDescription}>{step.description}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
-        <View
-          style={{
-            width: "100%",
-            padding: Spacing.block.medium,
-            paddingHorizontal: Spacing.block.large,
-          }}
-        >
-          <Button
-            block
-            buttonStyle={{
-              borderRadius: 32,
-
-              justifyContent: "center",
-              gap: Spacing.text.small,
-            }}
-            textStyle={{
-              flexShrink: 0,
-              flexGrow: 0,
-              flexBasis: "auto",
-            }}
-            text="Deploy Task"
-            onPress={() => {
-              router.push("/drone");
-            }}
-          />
-        </View>
       </ScrollView>
     </View>
   );
