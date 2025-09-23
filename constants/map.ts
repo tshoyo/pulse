@@ -1,6 +1,6 @@
 import { MapViewProps } from "react-native-maps/lib/MapView";
 
-const TESTING = true;
+const TESTING = false;
 export const MapDisplay: {
   zoom: { minimum: number; maximum: number };
   style: any[];
@@ -21,7 +21,7 @@ export const MapDisplay: {
     userInterfaceStyle: "light",
   },
   controls: {
-    zoomEnabled: TESTING,
+    zoomEnabled: false,
     zoomTapEnabled: false,
     zoomControlEnabled: false,
     rotateEnabled: false,

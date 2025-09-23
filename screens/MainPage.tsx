@@ -29,6 +29,7 @@ import {
   PERMISSIONS,
   RESULTS,
 } from "react-native-permissions";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const REQUIRED_PERMISSIONS = Platform.select({
   ios: [PERMISSIONS.IOS.LOCATION_WHEN_IN_USE],
@@ -219,7 +220,7 @@ const FindDroneView = ({
       icon={require("@/assets/icons/location.png")}
       color="secondary"
     ></Button>
-    <Button onPress={onFindPress} text="Find Nearby Drone"></Button>
+    <Button  onPress={onFindPress} text="Find Nearby Drone"></Button>
   </View>
 );
 
@@ -229,6 +230,7 @@ enum UserStep {
 }
 export default function MainPage() {
   const mapRef: Ref<MapView> = useRef(null);
+  const {top} = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [step, setStep] = useState<UserStep>(UserStep.CONNECTING);
   const [hasLocationPerms, setHasLocationPerms] = useState(false);
@@ -331,8 +333,8 @@ export default function MainPage() {
           minZoomLevel={MapDisplay.zoom.minimum}
           maxZoomLevel={MapDisplay.zoom.maximum}
           cameraZoomRange={{
-            minCenterCoordinateDistance: MapDisplay.zoom.minimum,
-            maxCenterCoordinateDistance: MapDisplay.zoom.maximum,
+            minCenterCoordinateDistance: 15000,
+            maxCenterCoordinateDistance: 30000,
           }}
           {...MapDisplay.display}
           {...MapDisplay.controls}
@@ -395,7 +397,7 @@ export default function MainPage() {
             ))}
         </MapView>
       </View>
-      <View style={styles.header}>
+      <View style={[styles.header, {paddingTop: top + Spacing.block.medium}]}>
         <LinearGradient
           style={styles.headerGradient}
           colors={["rgba(255,255,255,1)", "rgba(255,255,255,0)"]}

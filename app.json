@@ -18,7 +18,7 @@
         "NSMicrophoneUsageDescription": "$(PRODUCT_NAME) needs access to your Microphone.",
         "NSLocationWhenInUseUsageDescription": "$(PRODUCT_NAME) needs access to your location."
       },
-      "bundleIdentifier": "com.oascosolutions.pulse"
+      "bundleIdentifier": "com.pulsenet.app"
     },
     "android": {
       "config": {
