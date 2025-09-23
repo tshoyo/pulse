@@ -1,5 +1,5 @@
 import { SplashScreenController } from "@/components/splash-screen-controller";
-//import AuthProvider from "@/providers/auth-provider";
+import AuthProvider from "@/providers/auth-provider";
 import {
   DarkTheme,
   DefaultTheme,
@@ -14,10 +14,15 @@ import "react-native-reanimated";
 // Separate RootNavigator so we can access the AuthContext
 function RootNavigator() {
   // const { isLoggedIn } = useAuthContext();
-
+  const { isLoggedIn } = { isLoggedIn: true };
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(main)" />
+      <Stack.Protected guard={isLoggedIn}>
+        <Stack.Screen name="(main)" />
+      </Stack.Protected>
+      <Stack.Protected guard={!isLoggedIn}>
+        <Stack.Screen name="login" />
+      </Stack.Protected>
       <Stack.Screen name="+not-found" />
     </Stack>
   );
@@ -33,13 +38,13 @@ export default function RootLayout() {
   }
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      {/* <AuthProvider> */}
-      <GestureHandlerRootView>
-        <SplashScreenController />
-        <RootNavigator />
-        <StatusBar style="auto" />
-      </GestureHandlerRootView>
-      {/* </AuthProvider> */}
+      <AuthProvider>
+        <GestureHandlerRootView>
+          <SplashScreenController />
+          <RootNavigator />
+          <StatusBar style="auto" />
+        </GestureHandlerRootView>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

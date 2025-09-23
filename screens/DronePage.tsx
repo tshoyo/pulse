@@ -3,12 +3,12 @@ import { Colors, Font, Spacing } from "@/constants/theme";
 import { router } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-// import {
-//   Camera,
-//   CameraDevice,
-//   useCameraDevice,
-//   useCameraPermission,
-// } from "react-native-vision-camera";
+import {
+  Camera,
+  CameraDevice,
+  useCameraDevice,
+  useCameraPermission,
+} from "react-native-vision-camera";
 
 export default function DronePage() {
   const [stepIndex, setStepIndex] = useState(0);
@@ -40,13 +40,13 @@ export default function DronePage() {
   );
   return (
     <View style={[StyleSheet.absoluteFill, { backgroundColor: "black" }]}>
-      {/* {
+      {
         <Camera
           style={StyleSheet.absoluteFill}
           device={device as CameraDevice}
           isActive={true}
         />
-      } */}
+      }
       <View
         style={{
           position: "absolute",
