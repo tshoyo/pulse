@@ -1,17 +1,20 @@
 import { Colors } from "@/constants/theme";
-import { View } from "react-native";
+import { View, ViewStyle } from "react-native";
 
-export function DottedLine() {
+export function DottedLine({ style }: { style?: ViewStyle }) {
   return (
     <View
-      style={{
-        height: 0,
-        borderTopWidth: 0.5,
-        borderStyle: "dashed",
-        borderColor: Colors.gray.dark["500"],
-        flex: 1,
-        width: "100%",
-      }}
+      style={[
+        {
+          height: 0,
+          borderTopWidth: 0.5,
+          borderStyle: "dashed",
+          borderColor: Colors.gray.dark["500"],
+          flex: 1,
+          width: "100%",
+        },
+        style,
+      ]}
     ></View>
   );
 }

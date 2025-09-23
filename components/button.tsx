@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     flexDirection: "row",
     borderRadius: Spacing.block.xsmall * 2,
-    flex: 1,
+    flexShrink: 1,
   },
   buttonPrimary: {
     backgroundColor: Colors.brand.primary.color,
@@ -109,9 +109,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonIconOnly: {
-    flexGrow: 0,
     flexShrink: 0,
-    flexBasis: "auto",
   },
   buttonIcon: {
     marginRight: 8,

@@ -21,19 +21,20 @@ export function Toast({
   return (
     <View style={[styles.toast, style]}>
       <View style={[styles.textContainer]}>
-        {Title &&
-          (typeof Title === "string" ? (
+        {Title ? (
+          typeof Title === "string" ? (
             <Text style={[styles.title]}>{Title}</Text>
           ) : (
             <Title />
-          ))}
+          )
+        ) : null}
         <Text style={[styles.subtitle]}>{subtitle}</Text>
       </View>
-      {children && (
+      {children ? (
         <View style={[styles.contentContainer, contentContainerStyle]}>
           {children}
         </View>
-      )}
+      ) : null}
     </View>
   );
 }

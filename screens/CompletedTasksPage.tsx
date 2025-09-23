@@ -3,6 +3,7 @@ import { Colors, Font, Spacing } from "@/constants/theme";
 import { router } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const tasks = [
   {
@@ -155,8 +156,9 @@ const tasks = [
 ];
 
 export default function CompletedTasksPage() {
+  const { top } = useSafeAreaInsets();
   return (
-    <View style={StyleSheet.absoluteFill}>
+    <View style={[StyleSheet.absoluteFill, { paddingTop: top }]}>
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={styles.contentContainer}

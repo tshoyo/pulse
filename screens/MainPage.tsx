@@ -219,8 +219,9 @@ const FindDroneView = ({
       onPress={onLocationPress}
       icon={require("@/assets/icons/location.png")}
       color="secondary"
+      buttonStyle={{}}
     ></Button>
-    <Button  onPress={onFindPress} text="Find Nearby Drone"></Button>
+    <Button onPress={onFindPress} text="Find Nearby Drone"></Button>
   </View>
 );
 
@@ -230,7 +231,7 @@ enum UserStep {
 }
 export default function MainPage() {
   const mapRef: Ref<MapView> = useRef(null);
-  const {top} = useSafeAreaInsets();
+  const { top } = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [step, setStep] = useState<UserStep>(UserStep.CONNECTING);
   const [hasLocationPerms, setHasLocationPerms] = useState(false);
@@ -340,7 +341,7 @@ export default function MainPage() {
           {...MapDisplay.controls}
           showsUserLocation={false}
         >
-          {true && (
+          {
             <Marker
               coordinate={{
                 latitude: userLocation.latitude,
@@ -354,56 +355,60 @@ export default function MainPage() {
                 source={require("@/assets/icons/user-location.png")}
               />
             </Marker>
-          )}
-          {droneInfos.length &&
-            droneInfos.map((droneInfo) => (
-              <Marker
-                key={droneInfo.id}
-                coordinate={{
-                  latitude: droneInfo.latitude,
-                  longitude: droneInfo.longitude,
-                }}
-                centerOffset={{ x: 0, y: -12 }}
-                anchor={{ x: 0.5, y: 1 }}
-              >
-                <DroneMarker
-                  name={droneInfo.name}
-                  connected={droneInfo.connected}
-                  onPress={() => {
-                    setSelectedDrone({
-                      id: "19191",
-                      latitude: 42.364919,
-                      longitude: -83.073354,
-                      name: "Drone Model 5",
-                      connected: false,
-                      battery: 98,
-                      distance: ".5km",
-                      time: {
-                        value: 2,
-                        unit: "mins",
-                      },
-                      description: "Designated for police task use.",
-                      image: require("@/assets/images/drone.png"),
-                      agency: {
-                        name: "Detroit Police Department",
-                        insignia: require("@/assets/images/police-insignia.png"),
-                        hasBadge: true,
-                      },
-                      connecting: false,
-                    });
+          }
+          {droneInfos.length
+            ? droneInfos.map((droneInfo) => (
+                <Marker
+                  key={droneInfo.id}
+                  coordinate={{
+                    latitude: droneInfo.latitude,
+                    longitude: droneInfo.longitude,
                   }}
-                />
-              </Marker>
-            ))}
+                  centerOffset={{ x: 0, y: -12 }}
+                  anchor={{ x: 0.5, y: 1 }}
+                >
+                  <DroneMarker
+                    name={droneInfo.name}
+                    connected={droneInfo.connected}
+                    onPress={() => {
+                      setSelectedDrone({
+                        id: "19191",
+                        latitude: 42.364919,
+                        longitude: -83.073354,
+                        name: "Drone Model 5",
+                        connected: false,
+                        battery: 98,
+                        distance: ".5km",
+                        time: {
+                          value: 2,
+                          unit: "mins",
+                        },
+                        description: "Designated for police task use.",
+                        image: require("@/assets/images/drone.png"),
+                        agency: {
+                          name: "Detroit Police Department",
+                          insignia: require("@/assets/images/police-insignia.png"),
+                          hasBadge: true,
+                        },
+                        connecting: false,
+                      });
+                    }}
+                  />
+                </Marker>
+              ))
+            : null}
         </MapView>
       </View>
-      <View style={[styles.header, {paddingTop: top + Spacing.block.medium}]}>
+      <View style={[styles.header, { paddingTop: top + Spacing.block.medium }]}>
         <LinearGradient
           style={styles.headerGradient}
           colors={["rgba(255,255,255,1)", "rgba(255,255,255,0)"]}
           locations={[0.4, 1]}
         ></LinearGradient>
-        <Image source={require("@/assets/images/logo.png")} />
+        <Image
+          style={{ height: 41, width: 111 }}
+          source={require("@/assets/images/logo.png")}
+        />
         <TouchableOpacity onPress={() => router.navigate("/completed")}>
           <Image source={require("@/assets/icons/menu.png")} />
         </TouchableOpacity>

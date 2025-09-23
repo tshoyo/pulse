@@ -1,8 +1,9 @@
 import { Button, DottedLine, ThemedView as View } from "@/components";
 import { Colors, Font, Spacing } from "@/constants/theme";
 import { router, useLocalSearchParams } from "expo-router";
-import { Image, StyleSheet, Text } from "react-native";
+import { Image, ImageBackground, StyleSheet, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const steps = [
   {
@@ -50,9 +51,9 @@ const steps = [
 
 export default function CompletedTaskPage() {
   const { id } = useLocalSearchParams();
-
+  const { top } = useSafeAreaInsets();
   return (
-    <View style={StyleSheet.absoluteFill}>
+    <View style={[StyleSheet.absoluteFill, { paddingTop: top }]}>
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={styles.contentContainer}
@@ -62,16 +63,21 @@ export default function CompletedTaskPage() {
           buttonStyle={{
             transform: [{ rotateZ: "180deg" }],
             marginVertical: Spacing.block.xsmall,
+            marginLeft: Spacing.block.small,
           }}
           color="tertiary"
           icon={require("@/assets/icons/chevron-right-black.png")}
         />
-        <Text style={styles.title}>{"Traffic Stop - Speeding"}</Text>
+        <Text style={[styles.title, { marginLeft: Spacing.block.small }]}>
+          {"Traffic Stop - Speeding"}
+        </Text>
         <View
           style={{
             flexDirection: "row",
             alignItems: "flex-start",
             gap: Spacing.text.xsmall,
+            paddingRight: 24 + Spacing.block.small,
+            marginLeft: Spacing.block.small,
           }}
         >
           <View style={{ transform: [{ translateY: "25%" }] }}>
@@ -82,7 +88,23 @@ export default function CompletedTaskPage() {
             exceeding the posted speed limit.
           </Text>
         </View>
-        <DottedLine />
+        <DottedLine style={{ marginHorizontal: Spacing.block.small }} />
+        <View
+          style={{
+            width: "100%",
+            height: undefined,
+            aspectRatio: 1125 / 2778,
+          }}
+        >
+          <ImageBackground
+            source={require("@/assets/images/info-collection.png")}
+            resizeMode="contain"
+            style={{
+              flex: 1,
+              justifyContent: "center",
+            }}
+          />
+        </View>
       </ScrollView>
     </View>
   );
@@ -90,7 +112,6 @@ export default function CompletedTaskPage() {
 
 const styles = StyleSheet.create({
   contentContainer: {
-    padding: Spacing.block.small,
     alignItems: "flex-start",
     gap: Spacing.block.small,
   },
@@ -107,37 +128,5 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.block.small,
     gap: Spacing.text.medium,
     width: "100%",
-  },
-  stepCount: {
-    marginVertical: Spacing.block.medium,
-  },
-  stepsContainer: {
-    width: "100%",
-    borderRadius: 12,
-    borderColor: "#DCDCDCC4",
-    borderWidth: 1,
-  },
-  stepCard: {
-    padding: Spacing.block.small,
-    paddingVertical: Spacing.block.xsmall,
-    alignItems: "flex-start",
-    gap: Spacing.block.xxsmall,
-    flexDirection: "row",
-  },
-  stepContent: {
-    flex: 1,
-    backgroundColor: "transparent",
-  },
-  stepSubtitle: {
-    fontSize: Font.size.small,
-    color: Colors.dark.background,
-  },
-  stepTitle: {
-    fontSize: Font.size.medium,
-    fontWeight: "600",
-    marginVertical: Spacing.text.xxsmall,
-  },
-  stepDescription: {
-    fontSize: Font.size.small,
   },
 });

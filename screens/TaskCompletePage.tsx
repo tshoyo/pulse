@@ -4,6 +4,7 @@ import { Colors, Font, Spacing } from "@/constants/theme";
 import { router, useLocalSearchParams } from "expo-router";
 import { Image, StyleSheet, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const steps = [
   {
@@ -55,8 +56,9 @@ export default function TaskCompletePage() {
     (category) => category.slug === type
   )!.title;
 
+  const { top } = useSafeAreaInsets();
   return (
-    <View style={StyleSheet.absoluteFill}>
+    <View style={[StyleSheet.absoluteFill, { paddingTop: top }]}>
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={styles.contentContainer}
@@ -145,11 +147,6 @@ export default function TaskCompletePage() {
 
               justifyContent: "center",
               gap: Spacing.text.small,
-            }}
-            textStyle={{
-              flexShrink: 0,
-              flexGrow: 0,
-              flexBasis: "auto",
             }}
             text="Return Home"
             onPress={() => router.replace("/(main)")}
