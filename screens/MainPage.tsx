@@ -15,7 +15,7 @@ import { Colors, Font, Spacing } from "@/constants/theme";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import { Ref, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   ImageSourcePropType,
@@ -228,7 +228,7 @@ enum UserStep {
   TASKS,
 }
 export default function MainPage() {
-  const mapRef: Ref<MapView> = useRef(null);
+  //const mapRef: Ref<MapView> = useRef(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [step, setStep] = useState<UserStep>(UserStep.CONNECTING);
   const [hasLocationPerms, setHasLocationPerms] = useState(false);
@@ -250,17 +250,17 @@ export default function MainPage() {
         );
       });
     } else {
-      if (mapRef) {
-        mapRef.current?.animateCamera(
-          {
-            center: {
-              latitude: userLocation.latitude,
-              longitude: userLocation.longitude,
-            },
-          },
-          { duration: 0.5 }
-        );
-      }
+      //   if (mapRef) {
+      //     mapRef.current?.animateCamera(
+      //       {
+      //         center: {
+      //           latitude: userLocation.latitude,
+      //           longitude: userLocation.longitude,
+      //         },
+      //       },
+      //       { duration: 0.5 }
+      //     );
+      //   }
     }
   };
   const onFindPress = () => {
@@ -290,18 +290,18 @@ export default function MainPage() {
   };
 
   useEffect(() => {
-    if (mapRef && droneInfos.length) {
-      let droneInfo = droneInfos[0];
-      mapRef.current?.animateCamera(
-        {
-          center: {
-            latitude: droneInfo.latitude,
-            longitude: droneInfo.longitude,
-          },
-        },
-        { duration: 0.5 }
-      );
-    }
+    // if (mapRef && droneInfos.length) {
+    //   let droneInfo = droneInfos[0];
+    //   mapRef.current?.animateCamera(
+    //     {
+    //       center: {
+    //         latitude: droneInfo.latitude,
+    //         longitude: droneInfo.longitude,
+    //       },
+    //     },
+    //     { duration: 0.5 }
+    //   );
+    // }
   }, [droneInfos]);
   useEffect(() => {
     checkMultiple(REQUIRED_PERMISSIONS).then((statuses) => {
@@ -319,7 +319,7 @@ export default function MainPage() {
         ]}
       >
         <MapView
-          ref={mapRef}
+          //ref={mapRef}
           style={styles.map}
           customMapStyle={MapDisplay.style}
           initialRegion={{
@@ -330,10 +330,10 @@ export default function MainPage() {
           }}
           minZoomLevel={MapDisplay.zoom.minimum}
           maxZoomLevel={MapDisplay.zoom.maximum}
-          cameraZoomRange={{
-            minCenterCoordinateDistance: MapDisplay.zoom.minimum,
-            maxCenterCoordinateDistance: MapDisplay.zoom.maximum,
-          }}
+          //   cameraZoomRange={{
+          //     minCenterCoordinateDistance: MapDisplay.zoom.minimum,
+          //     maxCenterCoordinateDistance: MapDisplay.zoom.maximum,
+          //   }}
           {...MapDisplay.display}
           {...MapDisplay.controls}
           showsUserLocation={false}
