@@ -17,9 +17,41 @@ import {
   useCameraDevice,
   useCameraPermission,
   useCodeScanner,
+  useFrameProcessor,
 } from "react-native-vision-camera";
+import { useImageLabeler } from "react-native-vision-camera-v3-image-labeling";
+import { ImageLabelingOptions } from "react-native-vision-camera-v3-image-labeling/lib/typescript/src/types";
 
 const boxSize = 280;
+
+const ToastTitle = ({
+  checked,
+  text,
+}: {
+  checked?: boolean;
+  text?: string;
+}) => (
+  <View
+    style={{
+      flexDirection: "row",
+      alignItems: "center",
+      gap: Spacing.text.xxsmall,
+    }}
+  >
+    {checked ? (
+      <Image
+        style={{ width: 16, height: 16 }}
+        source={require("@/assets/icons/check-circle-green.png")}
+      />
+    ) : (
+      <Image
+        style={{ width: 16, height: 16 }}
+        source={require("@/assets/icons/check-circle-gray.png")}
+      />
+    )}
+    <Text style={{ fontWeight: "500", fontSize: Font.size.large }}>{text}</Text>
+  </View>
+);
 
 export default function DronePage() {
   const [steps, setSteps] = useState([
@@ -63,20 +95,36 @@ export default function DronePage() {
   const codeScanner = useCodeScanner({
     codeTypes: ["pdf-417"],
     onCodeScanned: (codes) => {
-      console.log(`Scanned ${codes.length} codes!`);
+      console.log(`Scanned ${codes.length} codes!`, codes);
     },
   });
   //   const frameProcessor = useSkiaFrameProcessor((frame) => {
-  //   'worklet'
-  // // const paint = Skia.Paint()
-  // //     paint.setColor(Skia.Color('white'))
-  // //     paint.setStrokeWidth(2)
-  // //       const centerX = frame.width / 2
-  // //   const centerY = frame.height / 2
-  // //   const rect = Skia.XYWHRect(centerX, centerY, 150, 150)
-  // //   frame.render()
-  // //   frame.drawRect( rect ,paint)
-  // }, [])
+  //     "worklet";
+  //     frame.render();
+  //     // const paint = Skia.Paint()
+  //     //     paint.setColor(Skia.Color('white'))
+  //     //     paint.setStrokeWidth(2)
+  //     //       const centerX = frame.width / 2
+  //     //   const centerY = frame.height / 2
+  //     //   const rect = Skia.XYWHRect(centerX, centerY, 150, 150)
+  //     //   frame.render()
+  //     //   frame.drawRect( rect ,paint)
+  //   }, []);
+  const options: ImageLabelingOptions = { minConfidence: 0.1 };
+  const threshold = 0.75;
+  const { scanImage } = useImageLabeler(options);
+  const frameProcessor = useFrameProcessor((frame) => {
+    "worklet";
+    const data = scanImage(frame) as unknown as {
+      confidence: number;
+      label: string;
+    }[];
+    const out = data.filter((dat) => {
+      "worklet";
+      return dat.confidence > threshold;
+    });
+    out.length && console.log(out);
+  }, []);
 
   const trigger = () => {
     setBoxColor("green");
@@ -118,37 +166,13 @@ export default function DronePage() {
   //   scheduleTask()
   // },[])
 
-  const toastTitle = () => (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        gap: Spacing.text.xxsmall,
-      }}
-    >
-      {stepIndex === steps.length || steps[stepIndex].completed ? (
-        <Image
-          style={{ width: 16, height: 16 }}
-          source={require("@/assets/icons/check-circle-green.png")}
-        />
-      ) : (
-        <Image
-          style={{ width: 16, height: 16 }}
-          source={require("@/assets/icons/check-circle-gray.png")}
-        />
-      )}
-      <Text style={{ fontWeight: "500", fontSize: Font.size.large }}>
-        Step {Math.min(stepIndex + 1, steps.length)}
-      </Text>
-    </View>
-  );
   return (
     <View style={[StyleSheet.absoluteFill, { backgroundColor: "black" }]}>
       {
         <Camera
           style={StyleSheet.absoluteFill}
           device={device as CameraDevice}
-          // frameProcessor={frameProcessor}
+          frameProcessor={frameProcessor}
           codeScanner={codeScanner}
           isActive={true}
         />
@@ -161,7 +185,15 @@ export default function DronePage() {
           width: "100%",
         }}
       >
-        <Toast title={toastTitle} subtitle={steps[stepIndex].description}>
+        <Toast
+          title={() => (
+            <ToastTitle
+              checked={stepIndex === steps.length || steps[stepIndex].completed}
+              text={`Step ${Math.min(stepIndex + 1, steps.length)}`}
+            />
+          )}
+          subtitle={steps[stepIndex].description}
+        >
           <View>
             <AnimatedCircularProgress
               size={54}
