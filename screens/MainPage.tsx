@@ -403,7 +403,7 @@ export default function MainPage() {
         <LinearGradient
           style={styles.headerGradient}
           colors={["rgba(255,255,255,1)", "rgba(255,255,255,0)"]}
-          locations={[0.4, 1]}
+          locations={[0.5, 1]}
         ></LinearGradient>
         <Image
           style={{ height: 41, width: 111 }}

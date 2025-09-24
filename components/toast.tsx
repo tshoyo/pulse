@@ -1,6 +1,6 @@
 import { Colors, Font, Spacing } from "@/constants/theme";
 import { PropsWithChildren, ReactNode } from "react";
-import { StyleSheet, ViewStyle } from "react-native";
+import { Image, StyleSheet, ViewStyle } from "react-native";
 import { ThemedText as Text } from "./themed-text";
 import { ThemedView as View } from "./themed-view";
 
@@ -21,13 +21,26 @@ export function Toast({
   return (
     <View style={[styles.toast, style]}>
       <View style={[styles.textContainer]}>
-        {Title ? (
-          typeof Title === "string" ? (
-            <Text style={[styles.title]}>{Title}</Text>
-          ) : (
-            <Title />
-          )
-        ) : null}
+        <View
+          style={{
+            flexDirection: "row",
+            gap: Spacing.text.xsmall,
+            alignItems: "center",
+          }}
+        >
+          <Image
+            style={{ width: 16, height: 16 }}
+            source={require("@/assets/icons/check-circle-green.png")}
+          />
+          {Title ? (
+            typeof Title === "string" ? (
+              <Text style={[styles.title]}>{Title}</Text>
+            ) : (
+              <Title />
+            )
+          ) : null}
+        </View>
+
         <Text style={[styles.subtitle]}>{subtitle}</Text>
       </View>
       {children ? (

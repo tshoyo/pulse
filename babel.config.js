@@ -3,12 +3,13 @@ module.exports = function (api) {
   return {
     plugins: [
       ["@babel/plugin-transform-export-namespace-from"],
+
       [
-        "react-native-reanimated/plugin",
+        "react-native-worklets-core/plugin",
         {
           globals: ["__labelImage"],
         },
-      ]["react-native-worklets-core/plugin"],
+      ],
     ],
     presets: ["babel-preset-expo"],
   };
